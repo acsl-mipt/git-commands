@@ -1,0 +1,25 @@
+#!/bin/bash
+
+f=.gitrepos
+ignore_f=.gitignore
+
+if [ -f $f ];then
+  while read -a p; do
+    len=${#p[@]}
+    if [ $len -gt 1 ];then
+      d=${p[$len-1]}
+      if [ -d $d ];then
+        (echo $d; cd $d; git pull)
+      else
+        git clone ${p[@]}
+      fi
+
+      git check-ignore $d >/dev/null
+      if [ $? -eq 1 ];then
+        echo "/$d" >> $ignore_f
+      fi
+    fi
+  done <$f
+else
+  echo "$f not exist"
+fi
