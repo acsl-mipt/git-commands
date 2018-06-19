@@ -31,6 +31,15 @@ if [ -f $f ];then
 
       elif [ "$mode" = "clean" ];then
         rm -r $d
+
+      elif [ "$mode" = "status" ];then
+        echo $d
+        if [ -d $d ];then
+          (cd $d; git status)
+        else
+          echo "Not initialized"
+        fi
+        echo
       fi
     fi
   done <$f
